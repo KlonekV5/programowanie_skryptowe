@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="PL-pl">
+    <head>
+      <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+      <title>Answer questions</title>
+    </head>
+    <body>
+      {% if latest_question_list %}
+      <div class="d-flex align-items-center justify-content-center" style="height:100vh;">
+          <form action="{% url 'save' %}" method="get">
+              {% csrf_token %}
+              {% for question in latest_question_list %}
+                  <div class="mb-2">
+                      {{ question.question_text }}
+                      {% for choice in question.choice_set.all %}
+                          <div class="form-check">
+                              <input class="form-check-input" type="radio" id="{{ choice.choice_text }}"
+                                     name="{{ question.question_text }}" value="{{ choice.choice_text}}"/>
+                              <label class="form-check-label" for="{{ choice.choice_text }}">
+                                  {{ choice.choice_text }}
+                              </label>
+                          </div>
+                      {% endfor %}
+                  </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary"
+                      style="width:100%;">Save</button>
+          </form>
+      </div>
+      {% else %}
+         <p>No polls are available.</p>
+      {% endif %}
+    </body>
+</html>
